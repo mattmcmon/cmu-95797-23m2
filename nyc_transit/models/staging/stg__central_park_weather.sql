@@ -25,5 +25,13 @@ renamed as (
 )
 
 -- Selects all columns from the above renaming and data type conversions 
-select * from renamed
-where (tmin > 0)
+select 
+    date,
+    awnd,
+    prcp,
+    snow,
+    snwd,
+    tmax,
+    tmin,
+    filename
+from renamed

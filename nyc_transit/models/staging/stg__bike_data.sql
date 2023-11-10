@@ -48,11 +48,11 @@ renamed as (
 -- Used https://stackoverflow.com/questions/47094631/combine-two-columns-data-into-one-column-leaving-null-values for help with merging columns
 -- Didn't include columns with large percentage of NULL values (determined by SUMMARIZE function). The bikeid, usertype, rideable_type, ride_id, gender and birth year had ~50% null values.
 select
-    coalesce(starttime, started_at)::timestamp as start_timestamp,
-	coalesce(stoptime, ended_at)::timestamp as end_timestamp,
+	coalesce(starttime, started_at)::timestamp as started_at_ts,
+	coalesce(stoptime, ended_at)::timestamp as ended_at_ts,
     -- Calculates the difference (in seconds) between the start and stop timestamps if there is a null value in trip duration
     -- Used https://www.w3schools.com/sql/func_sqlserver_datediff.asp to help with syntax
-    coalesce(tripduration::int, datediff('second', start_timestamp, end_timestamp)) as trip_duration,
+	coalesce(tripduration::int,datediff('second', started_at_ts, ended_at_ts)) tripduration,
 	coalesce("start station id", start_station_id) as start_station_id,  
 	coalesce("start station name", start_station_name) as start_station_name,
 	coalesce("start station latitude", start_lat)::double as start_lat,

@@ -5,13 +5,14 @@ with source as (
 
 ),
 
--- Selects columns from fhv_bases and does data type conversion, if needed
--- Didn't include dba column because it was 80% null values
+-- Selects columns from fhv_bases, updates names and data types where needed
 renamed as (
 
     select
-        base_number,
+        -- clean up the base_num to be properly linked as foreign keys
+        trim(upper(base_number)) as base_number,
         base_name,
+        dba,
         dba_category,
         filename
 
@@ -20,5 +21,4 @@ renamed as (
 )
 
 -- Selects all columns from the above renaming and data type conversions
-
 select * from renamed

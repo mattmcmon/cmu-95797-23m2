@@ -1,4 +1,3 @@
-
 -- Fetches data from raw yellow_tripdata
 with source as (
 
@@ -10,23 +9,15 @@ with source as (
 renamed as (
 
     select
-        VendorID as vendor_id,
+        vendorid,
         tpep_pickup_datetime,
         tpep_dropoff_datetime,
-        passenger_count,
+        passenger_count::int as passenger_count,
         trip_distance,
-        case
-            when RatecodeID is null then 0
-            else RatecodeID
-        end as rate_code_id,
-        -- Converts varchar to boolean
-        case
-            when store_and_fwd_flag = 'Y' then true
-            when store_and_fwd_flag = 'N' then false
-            else null
-        end as store_and_fwd_flag,
-        PULocationID as pu_loc_id,
-        DOLocationID as do_loc_id,
+        ratecodeid,
+        {{flag_to_bool("store_and_fwd_flag")}} as store_and_fwd_flag,
+        pulocationid,
+        dolocationid,
         payment_type,
         fare_amount,
         extra,
@@ -38,21 +29,11 @@ renamed as (
         congestion_surcharge,
         airport_fee,
         filename
-    from source
 
+    from source
+        WHERE tpep_pickup_datetime < TIMESTAMP '2022-12-31' -- drop rows in the future
+          AND trip_distance >= 0 -- drop negative trip_distance
 )
 
 -- Selects all columns from the above renaming and data type conversions 
 select * from renamed
-where (passenger_count > 0 or passenger_count is null)
-and (rate_code_id < 7 or rate_code_id is null)
-and (trip_distance > 0)
-and (fare_amount > 0)
-and (extra > 0)
-and (mta_tax > 0)
-and (tip_amount >= 0)
-and (tolls_amount >= 0)
-and (improvement_surcharge >= 0)
-and (total_amount > 0)
-and (congestion_surcharge >= 0)
-and (airport_fee >= 0 or airport_fee is null)

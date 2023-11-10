@@ -11,17 +11,18 @@ with source as (
 renamed as (
 
     select
-        dispatching_base_num,
+        trim(upper(dispatching_base_num)) as  dispatching_base_num, --some ids are lowercase
         pickup_datetime,
-        dropOff_datetime as dropoff_datetime,
-        PUlocationID as pu_loc_id,
-        DOlocationID as do_location_id,
-        Affiliated_base_number,
+        dropoff_datetime,
+        pulocationid,
+        dolocationid,
+        -- Didn't include sr_flag because it's always null
+        trim(upper(affiliated_base_number)) as affiliated_base_number,
         filename
-    from source
 
+    from source
+      WHERE dropoff_datetime < TIMESTAMP '2022-12-31' -- drop rows in the future
 )
 
 -- Selects all columns from the above renaming and data type conversions 
 select * from renamed
-where (dropoff_datetime < '2022-12-31 00:00:00')
