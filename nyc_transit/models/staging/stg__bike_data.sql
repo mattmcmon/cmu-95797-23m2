@@ -63,3 +63,6 @@ select
 	coalesce("end station longitude", end_lng)::double as end_lng,
 	filename
 from renamed
+  -- Excluded null values in end_lat and end_lng becuase it didn't drop many columns, but results in more complete observations 
+  WHERE end_lat not null 
+  AND end_lng not null
