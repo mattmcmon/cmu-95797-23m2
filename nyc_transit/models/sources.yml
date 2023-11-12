@@ -198,8 +198,10 @@ sources:
               - not_null
               - dbt_expectations.expect_column_to_exist
               - relationships:
-                  to: source('main', 'fvh_bases')
+                  to: source('main', 'fhv_bases')
                   field: base_number
+                  config:
+                    severity: warn
 
           - name: pickup_datetime
             data_type: TIMESTAMP
@@ -252,7 +254,7 @@ sources:
               - not_null
               - dbt_expectations.expect_column_to_exist
               - relationships:
-                  to: source('main', 'fvh_bases')
+                  to: source('main', 'fhv_bases')
                   field: base_number
                   config:
                     severity: warn
