@@ -1,0 +1,2 @@
+'EWR','Bronx','Brooklyn','Queens','Manhattan','Staten Island','Unknown'
+'1972','4855611','9368641','6595647','17046221','510684','916786'
